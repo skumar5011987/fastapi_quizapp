@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 from ..db.database import Base
 
 
@@ -7,6 +8,11 @@ class Questions(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     question_text = Column(String, index=True)
+    choices = relationship(
+        "Choices",
+        backref="question",
+        cascade="all, delete-orphan"
+    )
 
 
 class Choices(Base):

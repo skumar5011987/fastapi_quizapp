@@ -34,6 +34,16 @@ async def create_questions(question:QuestionBase, db:db_dependency):
     
     db.commit()
 
+@app.delete("/questions/{question_id}/")
+async def delete_question(question_id:int, db:db_dependency):
+    question = db.query(Questions).filter(Questions.id==question_id).first()
+    if not question:
+        raise HTTPException(status_code=404, detail="Question does not exist.")
+
+    db.delete(question)
+    db.commit()
+    return {"details":f"Question {question_id} deleted."}
+
 @app.get("/choices/{question_id}")
 async def resd_question(question_id:int, db:db_dependency):
     results = db.query(Choices).filter(Choices.question_id==question_id).all()
