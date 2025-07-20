@@ -8,11 +8,7 @@ class Questions(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     question_text = Column(String, index=True)
-    choices = relationship(
-        "Choices",
-        backref="question",
-        cascade="all, delete-orphan"
-    )
+    choices = relationship("Choices", backref="question", passive_deletes=True)
 
 
 class Choices(Base):
@@ -21,4 +17,4 @@ class Choices(Base):
     id = Column(Integer, primary_key=True, index=True)
     choice_text = Column(String, index=True)
     is_correct = Column(Boolean, default=False)
-    question_id = Column(Integer, ForeignKey("questions.id"))
+    question_id = Column(Integer, ForeignKey("questions.id", ondelete="CASCADE"))
